@@ -35,7 +35,7 @@ class AppRouter {
 
   // Cấu hình router
   static final GoRouter router = GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/welcome-1',
     routes: [
       GoRoute(
         path: '/login',
@@ -50,7 +50,7 @@ class AppRouter {
           return _buildSlideTransition(
             context,
             state,
-            HomePage(user: user), // ✅ KHÔNG CÒN userId
+            HomePage(user: user),
           );
         },
       ),
