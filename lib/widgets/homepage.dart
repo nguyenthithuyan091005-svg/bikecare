@@ -24,8 +24,7 @@ class _HomePageState extends State<HomePage> {
 
   /* ================= HEADER INFO ================= */
   String city = '...';
-  final String currentDate =
-      DateFormat('dd/MM/yyyy').format(DateTime.now());
+  final String currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
   /* ================= UI CONST ================= */
   final BoxDecoration _cardDecoration = BoxDecoration(
@@ -69,77 +68,103 @@ class _HomePageState extends State<HomePage> {
    * HEADER
    * ========================================================= */
   Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      color: const Color(0xFF4F6472),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Xin chào, ${getLastName(widget.user['full_name'])}!',
-                  style: const TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.amber,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  '$city, $currentDate',
-                  style: const TextStyle(color: Colors.white70),
-                ),
-              ],
-            ),
-          ),
-          _buildNearestGarage(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNearestGarage() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(60, 2, 3, 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        image: const DecorationImage(
-          image: AssetImage('images/map.png'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.35),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+  return Container(
+    padding: const EdgeInsets.all(20),
+    color: const Color(0xFF4F6472),
+    child: Row(
+      children: [
+        Expanded(
+          flex: 6, // 👈 70%
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Gara gần nhất',
-                style: TextStyle(color: Colors.white70, fontSize: 12),
-              ),
-              SizedBox(height: 4),
-              Text(
-                '300m',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
+                'Xin chào, ${getLastName(widget.user['full_name'])}!',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 26,
                   fontWeight: FontWeight.bold,
+                  color: Colors.amber,
                 ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                '$city, $currentDate',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: Colors.white70),
               ),
             ],
           ),
         ),
+        const SizedBox(width: 8),
+        Expanded(
+          flex: 4, // 👈 30%
+          child: _buildNearestGarage(),
+        ),
+      ],
+    ),
+  );
+}
+
+
+  Widget _buildNearestGarage() {
+  return AspectRatio(
+    aspectRatio: 1.9, // 👈 giữ hình đẹp & không tràn
+    child: Container(
+      padding: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        image: const DecorationImage(
+          image: AssetImage('images/map.png'),
+          fit: BoxFit.contain,
+        ),
       ),
-    );
-  }
+      child: Stack(
+  children: [
+    Positioned(
+      top: 6,
+      right: 0,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.35),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              'Gara gần nhất',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 9,
+              ),
+            ),
+            SizedBox(height: 1),
+            Text(
+              '300m',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  ],
+),
+
+    ),
+  );
+}
+
 
   /* =========================================================
    * MONTHLY EXPENSE
@@ -246,18 +271,15 @@ class _HomePageState extends State<HomePage> {
                 flex: 2,
                 child: _utilityCard(
                   'images/emergency.png',
-                  'Cứu hộ khẩn cấp',
-                  height: 240,
+                  'Cứu hộ\nkhẩn cấp',
+                  height: 270,
                   imageSize: 90,
                   textSize: 17,
                   onTap: _showEmergencySheet,
                 ),
               ),
               const SizedBox(width: 8),
-              Expanded(
-                flex: 3,
-                child: _utilityGrid(),
-              ),
+              Expanded(flex: 3, child: _utilityGrid()),
             ],
           ),
         ],
@@ -273,7 +295,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: _utilityCard(
                 'images/calendar.png',
-                'Đặt lịch bảo dưỡng',
+                'Đặt lịch \n bảo dưỡng',
                 onTap: () => context.go('/dashboard', extra: widget.user),
               ),
             ),
@@ -281,8 +303,8 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: _utilityCard(
                 'images/garage.png',
-                'Gara yêu thích',
-                imageSize: 55,
+                'Gara \n yêu thích',
+                imageSize: 52,
                 onTap: () => context.go('/dashboard', extra: widget.user),
               ),
             ),
@@ -294,8 +316,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: _utilityCard(
                 'images/tips.png',
-                'Mẹo bảo dưỡng',
-                imageSize: 60,
+                'Mẹo \n bảo dưỡng',
                 onTap: () => context.go('/dashboard', extra: widget.user),
               ),
             ),
@@ -303,7 +324,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: _utilityCard(
                 'images/search.png',
-                'Tra cứu phạt nguội',
+                'Tra cứu \nphạt nguội',
                 onTap: () => context.go('/dashboard', extra: widget.user),
               ),
             ),
@@ -317,7 +338,7 @@ class _HomePageState extends State<HomePage> {
     String imagePath,
     String label, {
     double imageSize = 46,
-    double height = 114,
+    double height = 130,
     double textSize = 14,
     VoidCallback? onTap,
   }) {
@@ -332,14 +353,12 @@ class _HomePageState extends State<HomePage> {
           children: [
             Image.asset(imagePath, height: imageSize),
             const SizedBox(height: 8),
-            SizedBox(
-              height: 40,
-              child: Text(
-                label,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                style: TextStyle(fontSize: textSize),
-              ),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: textSize),
             ),
           ],
         ),
@@ -510,14 +529,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<String> _getCityName(Position position) async {
-    final placemarks = await placemarkFromCoordinates(
-      position.latitude,
-      position.longitude,
-    );
-    return placemarks.isNotEmpty
-        ? (placemarks.first.locality ?? 'Unknown')
-        : 'Unknown';
-  }
+  final placemarks = await placemarkFromCoordinates(
+    position.latitude,
+    position.longitude,
+  );
+
+  if (placemarks.isEmpty) return 'Unknown';
+
+  final p = placemarks.first;
+
+  // DEBUG (có thể xóa sau)
+  debugPrint('Placemark: $p');
+
+  // Ưu tiên field hay có ở Việt Nam
+  return p.administrativeArea ??       // TP.HCM, Hà Nội
+         p.subAdministrativeArea ??    // Quận / Huyện
+         p.locality ??                 // Phường / Xã (hay null)
+         p.country ??                  // Vietnam
+         'Unknown';
+}
 
   /* =========================================================
    * EMERGENCY
@@ -525,8 +555,8 @@ class _HomePageState extends State<HomePage> {
   Widget _callTile(String phone, String label) {
     return ListTile(
       leading: const Icon(Icons.call, size: 40),
-      title: Text(label, style: const TextStyle(fontSize: 18)),
-      subtitle: Text(phone, style: const TextStyle(fontSize: 16)),
+      title: Text(label, style: const TextStyle(fontSize: 15)),
+      subtitle: Text(phone, style: const TextStyle(fontSize: 12)),
       onTap: () async {
         final uri = Uri(scheme: 'tel', path: phone);
         await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -542,49 +572,50 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (_) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Cứu hộ khẩn cấp',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'Chọn số điện thoại để gọi nhanh',
-                style: TextStyle(color: Colors.grey),
-              ),
-              const SizedBox(height: 16),
-              _callTile('119', 'Trung tâm cứu hộ giao thông'),
-              const Divider(),
-              _callTile('116', 'Cứu hộ giao thông'),
-              const Divider(),
-              _callTile('0909123456', 'Cứu hộ Huy Khang'),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF59CBEF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+        return SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Cứu hộ khẩn cấp',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Chọn số điện thoại để gọi nhanh',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                const SizedBox(height: 16),
+                _callTile('119', 'Trung tâm cứu hộ giao thông'),
+                const Divider(),
+                _callTile('116', 'Cứu hộ giao thông'),
+                const Divider(),
+                _callTile('0909123456', 'Cứu hộ Huy Khang'),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF59CBEF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    'Hủy bỏ',
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Color(0xFFFBC71C),
-                      fontWeight: FontWeight.bold,
+                    child: const Text(
+                      'Hủy bỏ',
+                      style: TextStyle(
+                        fontSize: 22, // 👈 giảm nhẹ để an toàn
+                        color: Color(0xFFFBC71C),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
